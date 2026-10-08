@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Une invitation pour toi</title>
+<meta name="theme-color" content="#fff4f5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff4f5;--card:#fff;--ink:#2b1d22;--mute:#8a6a73;--acc:#e5415f;--on:#fff;--line:#f0d5da;--soft:#fde3e8;--softink:#a8203f;
+--f:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-weight:500;line-height:1.5;display:flex;justify-content:center;padding:64px 16px 56px;transition:background .3s,color .3s}
+main{width:100%;max-width:440px;position:relative;z-index:1}
+#bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+#bg .st{position:absolute;animation:bob 5s ease-in-out infinite}
+.st svg{width:100%;height:100%;display:block}
+.peek{position:absolute;z-index:2;top:-52px;right:26px;width:78px;height:78px;pointer-events:none}
+.peek.l{right:auto;left:22px;width:64px;height:64px;top:-42px;transform:scaleX(-1)}
+@keyframes bob{50%{translate:0 -8px}}
+#bg svg,.peek svg{width:100%;height:100%;animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.14) rotate(-4deg)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips button{padding:6px 12px;font-size:.82rem;background:var(--bg)}
+.pets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pets button{padding:8px 4px;font-size:.78rem;border-radius:14px;background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:4px}
+.pets button[aria-pressed="true"]{border:2px solid var(--acc)}
+.pets svg{width:46px;height:46px}
+.thx{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.wk{width:76px;height:76px;flex:none}.wk svg{width:100%;height:100%}
+
+.card{background:var(--card);background:color-mix(in srgb,var(--card) 86%,transparent);position:relative;z-index:1;border:1px solid var(--line);border-radius:24px;padding:28px 22px}
+h1{font-weight:700;font-size:clamp(1.8rem,8vw,2.3rem);line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
+h2{font-weight:700;font-size:1.4rem;margin:0 0 8px;line-height:1.2}
+p{margin:0 0 14px;color:var(--mute)}
+label{display:block;font-weight:700;font-size:.88rem;margin:16px 0 6px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;max-width:100%}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button,.btn{font:inherit;font-weight:700;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:13px 22px;background:var(--card);color:var(--ink);text-decoration:none;display:inline-block;text-align:center}
+button:active{transform:translateY(1px)}
+.big{width:100%;margin-top:22px;font-size:1.02rem}
+.pink{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.ghost{background:transparent;color:var(--ink)}
+.stack{display:grid;gap:10px;margin-top:14px}
+.hidden{display:none!important}
+.arena{position:relative;height:120px;margin-top:22px;display:flex;gap:14px;justify-content:center;align-items:center}
+#yes{font-size:1.3rem;padding:16px 40px;animation:pulse 2s ease-in-out infinite}
+#no{transition:left .25s,top .25s,transform .25s,opacity .25s}
+#no.fly{position:fixed;z-index:9}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.tag{display:inline-block;background:var(--soft);color:var(--softink);font-weight:700;border-radius:999px;padding:4px 12px;font-size:.82rem;margin-bottom:14px}
+.slots{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.slots button{background:var(--bg)}
+.slots button[aria-pressed="true"]{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.link{word-break:break-all;font-size:.82rem;background:var(--bg);border-radius:12px;padding:10px 12px;border:1px dashed var(--line);color:var(--ink)}
+.conf{position:fixed;top:-30px;font-size:1.6rem;pointer-events:none;animation:fall 2.4s linear forwards;z-index:20}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){#yes,#bg .st,.peek svg{animation:none}#no,body{transition:none}.conf{display:none}}
+</style>
+</head>
+<body>
+<div id="bg" aria-hidden="true"></div>
+<main>
+<div class="peek" id="pet" aria-hidden="true"></div>
+<div class="peek l" id="pet2" aria-hidden="true"></div>
+
+<!-- CRÉATION -->
+<section id="make" class="card hidden">
+  <h1>Invite quelqu'un à un date.</h1>
+  <p>Remplis, copie le lien, envoie-le. Le bouton « Non » s'enfuira. La réponse te revient sur le canal de ton choix.</p>
+  <label>Ton petit compagnon <span style="font-weight:500;color:var(--mute)">(il réagit !)</span></label>
+  <div class="pets" id="pets" role="group" aria-label="Compagnon"></div>
+  <label for="to">Prénom de la personne invitée</label><input id="to" autocomplete="off" placeholder="Camille">
+  <label for="from">Ton prénom</label><input id="from" autocomplete="off" placeholder="Alex">
+  <label for="act">Ce que vous ferez</label><input id="act" placeholder="un dîner italien" value="un dîner">
+  <div class="chips" id="chips"><button type="button" data-v="un café">Café</button><button type="button" data-v="une balade">Balade</button><button type="button" data-v="un ciné">Ciné</button><button type="button" data-v="un dîner">Dîner</button><button type="button" data-v="un verre">Verre</button><button type="button" data-v="un pique-nique">Pique-nique</button></div>
+  <div class="row">
+    <div><label for="date">Date</label><input id="date" type="date"></div>
+    <div><label for="slots">Horaires (séparés par des virgules)</label><input id="slots" value="19h, 20h, 21h"></div>
+  </div>
+  <label for="msg">Petit mot (optionnel)</label><textarea id="msg" rows="2" placeholder="Je connais un super endroit…"></textarea>
+  <label for="ch">Recevoir la réponse par</label>
+  <select id="ch"><option value="wa">WhatsApp</option><option value="sms">SMS</option><option value="mail">E-mail</option></select>
+  <label for="ct" id="ctl">Ton numéro (avec indicatif, ex. 33612345678)</label><input id="ct" inputmode="tel" autocomplete="off">
+  <button class="big pink" id="gen" type="button">Créer mon invitation</button>
+  <p id="err" style="color:var(--acc);margin:10px 0 0"></p>
+</section>
+
+<!-- LIEN GÉNÉRÉ -->
+<section id="done" class="card hidden">
+  <span class="tag">Prête</span>
+  <h2>Envoie-la maintenant</h2>
+  <div class="link" id="lnk"></div>
+  <div class="stack">
+    <button type="button" class="pink" id="cp">Copier le lien</button>
+    <a class="btn" id="sw" target="_blank" rel="noopener">Envoyer par WhatsApp</a>
+    <a class="btn" id="ss">Envoyer par SMS</a>
+    <a class="btn ghost" id="pv" target="_blank" rel="noopener">Voir ce qu'elle verra</a>
+    <button type="button" class="ghost" id="back">Modifier</button>
+  </div>
+</section>
+
+<!-- INVITATION -->
+<section id="inv" class="card hidden">
+  <span class="tag" id="forx"></span>
+  <h1 id="q"></h1>
+  <p id="sub"></p>
+  <div class="arena" id="arena">
+    <button id="yes" class="pink" type="button">Oui</button>
+    <button id="no" type="button">Non</button>
+  </div>
+  <p id="hint" style="text-align:center;margin-top:8px;font-size:.9rem">(dire non ne sert à rien, mais tu peux essayer)</p>
+</section>
+
+<!-- CHOIX CRÉNEAU -->
+<section id="pick" class="card hidden">
+  <div class="thx"><div class="wk" id="wink" aria-hidden="true"></div><div><span class="tag">Merci chou 💕</span><h2>Quand ça t'arrange ?</h2></div></div>
+  <p id="when"></p>
+  <div class="slots" id="slotbox" role="group" aria-label="Horaires"></div>
+  <label for="note">Un petit mot pour <span id="who"></span></label>
+  <textarea id="note" rows="2"></textarea>
+  <button class="big pink" id="send" type="button">Envoyer ma réponse</button>
+</section>
+</main>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function show(id){["make","done","inv","pick"].forEach(function(s){$(s).classList.toggle("hidden",s!==id)})}
+function enc(o){var b=new TextEncoder().encode(JSON.stringify(o)),s="";b.forEach(function(c){s+=String.fromCharCode(c)});return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function dec(s){s=s.replace(/-/g,"+").replace(/_/g,"/");var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return JSON.parse(new TextDecoder().decode(a))}
+function fdate(d){if(!d)return"";var x=new Date(d+"T12:00:00");return x.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
+var base=location.href.split("#")[0];
+var D=null;
+var FUR={
+ neige:{a:"#ffffff",b:"#e3ddee",e:"#ffc4cf",i:"#6fb2d8",s:"",m:0,d:"#2b1d22",w:"#c9bcd6",n:"Neige"},
+ roux:{a:"#ffc383",b:"#e48a3a",e:"#ffb09a",i:"#e9b536",s:"#c26a26",m:1,d:"#2b1d22",w:"#fff",n:"Roux"},
+ gris:{a:"#c4c2cc",b:"#83818d",e:"#f3b3bf",i:"#d8a62c",s:"#62606c",m:1,d:"#2b1d22",w:"#fff",n:"Gris"},
+ tuxedo:{a:"#504d5b",b:"#25232d",e:"#e99aa8",i:"#9cc24c",s:"",m:2,d:"#efe9d9",w:"#fff",n:"Tuxedo"}};
+var SEQ=["surprise","triste","boudeur","triste","surprise","boudeur","triste"],curPet="neige";
+(function(){
+  var gd="";
+  Object.keys(FUR).forEach(function(k){var f=FUR[k];gd+='<radialGradient id="g-'+k+'" cx=".5" cy=".38" r=".75"><stop offset="0" stop-color="'+f.a+'"/><stop offset="1" stop-color="'+f.b+'"/></radialGradient>'});
+  document.body.insertAdjacentHTML("afterbegin",'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'+gd+'<filter id="die" x="-15%" y="-15%" width="130%" height="130%"><feMorphology in="SourceAlpha" operator="dilate" radius="3.5" result="d"/><feFlood flood-color="#fff"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter><symbol id="ht" viewBox="0 0 100 100"><path d="M50 88C8 58 20 18 43 28C47 30 49 33 50 36C51 33 53 30 57 28C80 18 92 58 50 88Z" fill="#ff5fa2"/></symbol></defs></svg>');
+})();
+function cat(fur,ex,acc){
+  var key=FUR[fur]?fur:"neige",c=FUR[key],P="#1a1820",fu="url(#g-"+key+")",s="",i,a;
+  var T={surprise:"w",triste:"s",boudeur:"l",heureux:"h",dort:"z",supplie:"b",cri:"w"}[ex]||"o";
+  var tR=ex==="wink"?"h":T;
+  function eye(t,x,sd){
+    var y=66,xo=x+sd*10,xi=x-sd*10,e="";
+    if(t==="h"||t==="z"){return '<path d="M'+(x-8)+' '+(t==="h"?y+3:y)+'q8 '+(t==="h"?-11:7)+' 16 0" fill="none" stroke="'+c.d+'" stroke-width="3.2" stroke-linecap="round"/>'}
+    var r=t==="b"?10:t==="w"?9:8,pr=t==="b"?[7,8]:t==="w"?[3,3.6]:[4,6.4],h=t==="b"?3.6:2.6;
+    if(t==="w")e+='<circle cx="'+x+'" cy="'+y+'" r="11.5" fill="#fff"/>';
+    e+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c.i+'"/><ellipse cx="'+x+'" cy="'+y+'" rx="'+pr[0]+'" ry="'+pr[1]+'" fill="'+P+'"/><circle cx="'+(x-2.2)+'" cy="'+(y-2.6)+'" r="'+h+'" fill="#fff"/><circle cx="'+(x+2.8)+'" cy="'+(y+3)+'" r="1.2" fill="#fff" opacity=".85"/>';
+    if(t==="l"||t==="s"){
+      var p=t==="l"?[xo,y-11,xi,y-11,xi,y+3,xo,y-4]:[xo,y-11,xi,y-11,xi,y-5,xo,y+1];
+      var ln=t==="l"?[xo,y-4,xi,y+3]:[xo,y+1,xi,y-5];
+      e+='<polygon points="'+p.join(" ")+'" fill="'+c.a+'"/><path d="M'+ln[0]+' '+ln[1]+'L'+ln[2]+' '+ln[3]+'" stroke="'+P+'" stroke-width="1.8" stroke-linecap="round"/>';
+    }
+    return e;
+  }
+  var fl=acc==="fleur",bear=acc==="ourson";
+  if(fl)for(i=0;i<8;i++){a=i*Math.PI/4;s+='<circle cx="'+(60+43*Math.cos(a)).toFixed(1)+'" cy="'+(72+43*Math.sin(a)).toFixed(1)+'" r="13" fill="#ffe55c" stroke="#efc93b" stroke-width="1.5"/>'}
+  if(!fl&&!bear)s+='<path d="M22 56L20 18Q40 20 54 40Z" fill="'+fu+'"/><path d="M98 56L100 18Q80 20 66 40Z" fill="'+fu+'"/><path d="M27 48L26 28Q36 31 46 42Z" fill="'+c.e+'"/><path d="M93 48L94 28Q84 31 74 42Z" fill="'+c.e+'"/>';
+  s+='<ellipse cx="60" cy="70" rx="41" ry="35" fill="'+fu+'"/>';
+  if(c.m===2)s+='<path d="M60 36Q53 58 51 80H69Q67 58 60 36Z" fill="#fff"/>';
+  if(c.s)s+='<path d="M60 36v11M51 38l2.5 9M69 38l-2.5 9M20 64h9M21 72h9M100 64h-9M99 72h-9" stroke="'+c.s+'" stroke-width="3.2" stroke-linecap="round" fill="none"/>';
+  if(c.m)s+='<ellipse cx="60" cy="86" rx="17" ry="12" fill="#fff" opacity=".9"/>';
+  if(/heureux|wink|dort|supplie/.test(ex))s+='<ellipse cx="30" cy="82" rx="7" ry="4.5" fill="#ff7da0" opacity=".5"/><ellipse cx="90" cy="82" rx="7" ry="4.5" fill="#ff7da0" opacity=".5"/>';
+  if(acc!=="lunettes")s+=eye(T,42,-1)+eye(tR,78,1);
+  s+='<path d="M54.5 77Q60 74 65.5 77Q63.5 83.5 60 85.5Q56.5 83.5 54.5 77Z" fill="#f08fa0"/><ellipse cx="58" cy="77" rx="2" ry="1" fill="#fff" opacity=".6"/>';
+  var B='M60 85.5v2.5',M={
+   neutre:B+'M60 88q-5 5-10 1M60 88q5 5 10 1',
+   triste:B+'M50 95q10-8 20 0',
+   boudeur:B+'M50 91q5-3 10 0q5-3 10 0',
+   dort:B+'M54 90q6 4 12 0',
+   supplie:B+'M54 89q3 3 6 0q3 3 6 0',
+   langue:B+'M50 90q5 5 10 0q5 5 10 0'};
+  var F={
+   heureux:'<path d="M49 88q11 14 22 0Z" fill="#b83a58" stroke="none"/><path d="M55 96q5 6 10 0q-5-3-10 0Z" fill="#ff8aa4" stroke="none"/>',
+   surprise:'<ellipse cx="60" cy="95" rx="5.5" ry="7.5" fill="#7d2a3d" stroke="none"/>',
+   cri:'<path d="M46 87q14 30 28 0Z" fill="#8a2f45" stroke="none"/><ellipse cx="60" cy="102" rx="9" ry="5" fill="#ff7f98" stroke="none"/><path d="M53 88l2.2 6 2.2-6ZM62.6 88l2.2 6 2.2-6Z" fill="#fff" stroke="none"/>',
+   langue:'<path d="M55 93q5 14 10 0Z" fill="#ff7f98" stroke="#d85a78" stroke-width="1.2"/>'};
+  F.wink=F.heureux;
+  var mp=M[ex]||(F[ex]?B:M.neutre);
+  s+='<g fill="none" stroke="#5a2f3a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="'+mp+'"/>'+(F[ex]||"")+'</g>';
+  s+='<path d="M44 87l-13-2M44 91l-13 3M76 87l13-2M76 91l13 3" stroke="'+c.w+'" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".9"/>';
+  if(ex==="surprise")s+='<path d="M103 36q-6 9 0 13q6-4 0-13Z" fill="#9ad6ff"/>';
+  if(ex==="triste")s+='<path d="M35 77q-4 8 0 11q4-3 0-11Z" fill="#9ad6ff"/>';
+  if(ex==="dort")s+='<text x="92" y="28" font-size="17" font-weight="700" fill="#e5415f" font-family="sans-serif">z</text><text x="104" y="15" font-size="11" font-weight="700" fill="#e5415f" font-family="sans-serif">z</text>';
+  if(bear)s+='<circle cx="28" cy="32" r="12" fill="#b88555"/><circle cx="28" cy="32" r="6" fill="#e9cba6"/><circle cx="92" cy="32" r="12" fill="#b88555"/><circle cx="92" cy="32" r="6" fill="#e9cba6"/><path d="M22 58Q24 16 60 14Q96 16 98 58Q60 40 22 58Z" fill="#b88555"/>';
+  if(acc==="lunettes")s+='<path d="M31 64L21 60M89 64L99 60M53 66h14" stroke="#1c1b22" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="66" r="12" fill="#1c1b22"/><circle cx="78" cy="66" r="12" fill="#1c1b22"/><path d="M34 60l7-3M70 60l7-3" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".5"/>';
+  if(acc==="rose")s+='<path d="M96 54q12-2 14-12q-10 0-14 12Z" fill="#6fbf86"/><circle cx="96" cy="40" r="10" fill="#e5415f"/><path d="M90 40q6-7 12 0q-4 6-9 3" fill="none" stroke="#a81c3f" stroke-width="1.8" stroke-linecap="round"/>';
+  if(acc==="coeurs")s+='<use href="#ht" x="6" y="6" width="18" height="18"/><use href="#ht" x="24" y="0" width="22" height="22"/><use href="#ht" x="52" y="0" width="14" height="14"/><use href="#ht" x="74" y="2" width="22" height="22"/><use href="#ht" x="96" y="12" width="16" height="16"/>';
+  return '<svg viewBox="0 0 120 128" aria-hidden="true"><g filter="url(#die)">'+s+'</g></svg>';
+}
+function pet(fur,ex){return cat(fur,ex,"")}
+function setPet(ex){$("pet").innerHTML=pet(curPet,ex)}
+var pb=$("pets");
+Object.keys(FUR).forEach(function(k){var b=document.createElement("button");b.type="button";b.dataset.p=k;b.innerHTML=pet(k,"neutre")+FUR[k].n;b.setAttribute("aria-pressed",k===curPet?"true":"false");pb.appendChild(b)});
+pb.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;curPet=b.dataset.p;[].forEach.call(pb.children,function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});setPet("heureux")});
+$("pet2").innerHTML=cat("gris","neutre","");
+var BG=[["gris","boudeur","","left:2%;top:3%",98,-8],["roux","langue","","right:3%;top:7%",94,7],["neige","heureux","coeurs","left:2%;top:30%",104,-5],["tuxedo","cri","","right:2%;top:34%",96,6],["neige","supplie","fleur","left:3%;top:57%",106,-6],["gris","neutre","lunettes","right:3%;top:60%",92,8],["roux","dort","ourson","left:5%;bottom:3%",98,-4],["tuxedo","heureux","rose","right:4%;bottom:3%",102,5],["neige","triste","","left:40%;bottom:1%",80,3]];
+BG.forEach(function(b,i){var d=document.createElement("div");d.className="st";d.style.cssText=b[3]+";width:"+b[4]+"px;height:"+Math.round(b[4]*1.07)+"px;rotate:"+b[5]+"deg;animation-delay:-"+(i*.7)+"s";d.innerHTML=cat(b[0],b[1],b[2]);$("bg").appendChild(d)});
+$("chips").addEventListener("click",function(e){var b=e.target.closest("button");if(b)$("act").value=b.dataset.v});
+
+// ---- création
+$("ch").addEventListener("change",function(){
+  var m=this.value==="mail";
+  $("ctl").textContent=m?"Ton adresse e-mail":"Ton numéro (avec indicatif, ex. 33612345678)";
+  $("ct").type=m?"email":"text";$("ct").inputMode=m?"email":"tel";
+});
+$("gen").addEventListener("click",function(){
+  var o={t:$("to").value.trim(),f:$("from").value.trim(),a:$("act").value.trim()||"un date",d:$("date").value,
+    s:$("slots").value.split(",").map(function(x){return x.trim()}).filter(Boolean).slice(0,8),
+    m:$("msg").value.trim(),p:curPet,c:$("ch").value,v:$("ct").value.trim()};
+  if(!o.t||!o.f){$("err").textContent="Ajoute les deux prénoms.";return}
+  if(!o.v){$("err").textContent="Ajoute ton contact, sinon tu ne recevras pas la réponse.";return}
+  $("err").textContent="";
+  var url=base+"#i="+enc(o);
+  $("lnk").textContent=url;
+  var txt="J'ai un truc pour toi 👀 "+url;
+  $("sw").href="https://wa.me/?text="+encodeURIComponent(txt);
+  $("ss").href="sms:?&body="+encodeURIComponent(txt);
+  $("pv").href=url;
+  $("done").dataset.url=url;
+  show("done");
+});
+$("cp").addEventListener("click",function(){
+  var u=$("done").dataset.url,b=this;
+  function ok(){b.textContent="Lien copié ✓"}
+  function fb(){var r=document.createRange();r.selectNodeContents($("lnk"));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Sélectionné : fais Copier"}
+  try{navigator.clipboard.writeText(u).then(ok,fb)}catch(e){fb()}
+});
+$("back").addEventListener("click",function(){show("make")});
+
+// ---- invitation
+var esc=0,scale=1;
+function flee(){
+  var n=$("no");esc++;setPet(SEQ[Math.min(esc-1,6)]);
+  if(esc>=7){n.style.opacity="0";n.style.pointerEvents="none";$("hint").textContent="Il ne reste plus qu'une option 😉";return}
+  scale=Math.max(.35,scale*.85);
+  if(!n.classList.contains("fly"))n.classList.add("fly");
+  var w=n.offsetWidth,h=n.offsetHeight,m=12;
+  var x=m+Math.random()*(innerWidth-w-2*m),y=m+Math.random()*(innerHeight-h-2*m);
+  n.style.left=x+"px";n.style.top=y+"px";n.style.transform="scale("+scale+") rotate("+((Math.random()*30-15)|0)+"deg)";
+}
+function boom(){
+  var e=["💖","✨","🎉","🥂","💫"];
+  for(var i=0;i<28;i++){var s=document.createElement("span");s.className="conf";s.textContent=e[i%e.length];
+    s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(s);
+    setTimeout(function(x){x.remove()},3500,s)}
+}
+function openInv(){
+  curPet=D.p||"neige";setPet("neutre");
+  $("forx").textContent="Pour "+D.t;
+  $("q").textContent="Ça te dit "+D.a+" avec moi ?";
+  $("sub").textContent=D.f+(D.m?" : « "+D.m+" »":" t'a préparé quelque chose.");
+  show("inv");
+  var n=$("no");
+  ["pointerenter","pointerdown","touchstart","focus"].forEach(function(ev){n.addEventListener(ev,function(e){if(ev!=="focus")e.preventDefault();flee()},{passive:false})});
+  n.addEventListener("click",function(e){e.preventDefault();flee()});
+}
+var chosen=null;
+$("yes").addEventListener("click",function(){
+  boom();setPet("heureux");$("wink").innerHTML=pet(curPet,"wink");
+  $("when").textContent=D.f+" va être aux anges. "+(D.d?fdate(D.d)+" — ":"")+(D.s.length?"choisis ton horaire :":"On se met d'accord ensemble ?");
+  $("who").textContent=D.f;
+  var box=$("slotbox");box.innerHTML="";
+  D.s.forEach(function(s,i){
+    var b=document.createElement("button");b.type="button";b.textContent=s;b.setAttribute("aria-pressed",i===0?"true":"false");
+    if(i===0)chosen=s;
+    b.addEventListener("click",function(){chosen=s;[].forEach.call(box.children,function(c){c.setAttribute("aria-pressed",c===b?"true":"false")})});
+    box.appendChild(b)});
+  if(!D.s.length)chosen="";
+  show("pick");
+});
+$("send").addEventListener("click",function(){
+  var msg=D.t+" a dit OUI ! 🎉\n"+D.a+(D.d?" — "+fdate(D.d):"")+(chosen?" à "+chosen:"")+($("note").value.trim()?"\nSon mot : "+$("note").value.trim():"");
+  var v=D.v,u;
+  if(D.c==="wa")u="https://wa.me/"+v.replace(/\D/g,"")+"?text="+encodeURIComponent(msg);
+  else if(D.c==="sms")u="sms:"+v+"?&body="+encodeURIComponent(msg);
+  else u="mailto:"+v+"?subject="+encodeURIComponent(D.t+" a dit oui !")+"&body="+encodeURIComponent(msg);
+  boom();
+  window.open(u,"_blank")||(location.href=u);
+});
+
+// ---- routage
+function route(){
+  var m=location.hash.match(/^#i=(.+)$/);
+  if(m){try{D=dec(m[1]);openInv();return}catch(e){}}
+  setPet("neutre");show("make");
+}
+route();
+})();
+</script>
+</body>
+</html>
